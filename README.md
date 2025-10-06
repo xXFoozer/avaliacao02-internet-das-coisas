@@ -1,15 +1,14 @@
 
-# Atividade Avaliativa I - Prática
+# Atividade Avaliativa II - Prática
 
 - Curso - Desenvolvimento de Sistemas
-- Unidade Curricular - Desenvolvimento de Sistemas
+- Unidade Curricular - Internet das Coisas
 - Docente - Gustavo Roberto de Souza
 
 ## Orientações Gerais
 - A avaliação deverá ser realizada individualmente.
 - Não é permitido o uso do celular durante a realização da atividade.
-- Conceitos de entrada e saída de dados, variáveis, operadores, estruturas condicionais, estruturas de repetição e estruturas de dados.
-- A entrega deverá ser feita no AVA. Deve ser enviado apenas o link do repositório do github.
+- Conceitos de Internet das Coisas (MQTT e Fluxos NodeRED)
 
 ## Passo-a-Passo (Clonar e Entrega)
 1. Você deve fazer um fork desse repositório, na parte superior dessa página clique na botão de fork. 
