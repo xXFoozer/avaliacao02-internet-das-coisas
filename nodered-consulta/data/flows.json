@@ -139,7 +139,8 @@
         "wires": [
             [
                 "e2f46f02fa6dcced",
-                "8555d0ce760e7f85"
+                "8555d0ce760e7f85",
+                "0cc3267d4b3ffd77"
             ]
         ]
     },
@@ -341,8 +342,7 @@
         "y": 580,
         "wires": [
             [
-                "26e7f5b97b3a8bf8",
-                "0cc3267d4b3ffd77"
+                "26e7f5b97b3a8bf8"
             ]
         ]
     },
@@ -403,8 +403,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 360,
-        "y": 660,
+        "x": 760,
+        "y": 300,
         "wires": []
     },
     {

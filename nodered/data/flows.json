@@ -1,0 +1,283 @@
+[
+    {
+        "id": "e8735e51f6facf66",
+        "type": "tab",
+        "label": "Prova",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "90acc9a9f3ec1aa0",
+        "type": "mqtt-broker",
+        "name": "MQTT",
+        "broker": "mosquitto",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "e4e23d82a2558e56",
+        "type": "mongodb4-client",
+        "name": "",
+        "protocol": "mongodb",
+        "hostname": "mongo",
+        "port": "27017",
+        "dbName": "iot-prova",
+        "appName": "",
+        "authSource": "",
+        "authMechanism": "DEFAULT",
+        "tls": false,
+        "tlsCAFile": "",
+        "tlsCertificateKeyFile": "",
+        "tlsInsecure": false,
+        "connectTimeoutMS": "30000",
+        "socketTimeoutMS": "0",
+        "minPoolSize": "0",
+        "maxPoolSize": "100",
+        "maxIdleTimeMS": "0",
+        "uri": "",
+        "advanced": "{}",
+        "uriTabActive": "tab-uri-simple"
+    },
+    {
+        "id": "40c562cb9ac133da",
+        "type": "postgreSQLConfig",
+        "name": "",
+        "host": "postgres",
+        "hostFieldType": "str",
+        "port": 5432,
+        "portFieldType": "num",
+        "database": "iot",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": 10,
+        "maxFieldType": "num",
+        "idle": 1000,
+        "idleFieldType": "num",
+        "connectionTimeout": 10000,
+        "connectionTimeoutFieldType": "num",
+        "user": "admin",
+        "userFieldType": "str",
+        "password": "admin",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "5c9a3d4ab2079261",
+        "type": "mqtt in",
+        "z": "e8735e51f6facf66",
+        "name": "Device infomation",
+        "topic": "device/+/info",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "90acc9a9f3ec1aa0",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 400,
+        "y": 400,
+        "wires": [
+            [
+                "8ee10771eeddebe7"
+            ]
+        ]
+    },
+    {
+        "id": "8ee10771eeddebe7",
+        "type": "uuid",
+        "z": "e8735e51f6facf66",
+        "uuidVersion": "v4",
+        "namespaceType": "",
+        "namespace": "",
+        "namespaceCustom": "",
+        "name": "",
+        "field": "payload._id",
+        "fieldType": "msg",
+        "x": 730,
+        "y": 400,
+        "wires": [
+            [
+                "d10ae43ed05dfdb0"
+            ]
+        ]
+    },
+    {
+        "id": "d10ae43ed05dfdb0",
+        "type": "function",
+        "z": "e8735e51f6facf66",
+        "name": "Create",
+        "func": "\nconst deviceId = msg.payload.device_id\nif (!deviceId) return null\n\nmsg.collection = \"device_info\"\nmsg.operation = \"updateOne\"\n\nconst update = {\n    $set: {\n        device_id: deviceId,\n        model: msg.payload.model || null,\n        location: msg.payload.location || null,\n        light: msg.payload.light || null,\n        updatedAt: new Date,\n        raw: JSON.stringify(msg.payload)\n    },\n    $setOnInsert: { createdAt: new Date, _id: msg.payload._id, }\n}\n\nmsg.payload = [{ device_id: deviceId }, update, { upsert: true }]\n\n\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 400,
+        "wires": [
+            [
+                "80e5b32c5eb40c7d"
+            ]
+        ]
+    },
+    {
+        "id": "80e5b32c5eb40c7d",
+        "type": "mongodb4",
+        "z": "e8735e51f6facf66",
+        "clientNode": "e4e23d82a2558e56",
+        "mode": "collection",
+        "collection": "",
+        "operation": "",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1190,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e0f8d8cf15a1b718",
+        "type": "mqtt in",
+        "z": "e8735e51f6facf66",
+        "name": "Device Temp",
+        "topic": "device/+/status/temp",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "90acc9a9f3ec1aa0",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 560,
+        "wires": [
+            [
+                "a4de0ae7a662a877"
+            ]
+        ]
+    },
+    {
+        "id": "a4de0ae7a662a877",
+        "type": "uuid",
+        "z": "e8735e51f6facf66",
+        "uuidVersion": "v4",
+        "namespaceType": "",
+        "namespace": "",
+        "namespaceCustom": "",
+        "name": "",
+        "field": "payload._id",
+        "fieldType": "msg",
+        "x": 670,
+        "y": 560,
+        "wires": [
+            [
+                "fdee0a4b6750661f"
+            ]
+        ]
+    },
+    {
+        "id": "fdee0a4b6750661f",
+        "type": "function",
+        "z": "e8735e51f6facf66",
+        "name": "Create DeviceTemp",
+        "func": "\nconst deviceId = msg.payload.device_id\nif (!deviceId) return null\n\nconst update = {\n\n    $set: {\n        device_id: deviceId,\n        data: {\n            temperature: msg.payload.data.temperature,\n            unit: msg.payload.data.unit,\n        },\n        updatedAt: new Date,\n        raw: JSON.stringify(msg.payload)\n    },\n    $setOnInsert: { createdAt: new Date, _id: msg.payload._id, }\n}\n\nconst temp = msg.payload.data.temperature\nif (temp < 5) {\n\n    msg.payload = [{ device_id: deviceId }, update, { upsert: true }]\n    return msg;\n\n} else if (temp >= 5) {\n    var postgres = {}\n    postgres.query = `INSERT INTO sensores (id, created_at, temperature,topic) VALUES ($1, $2, $3, $4)`;\n    postgres.params = [\n        msg.payload._id,\n        msg.payload.createAt,\n        msg.payload.temperature,\n        msg.payload.topic\n    ]\n    return [msg, postgres]\n}\n\n\n\n\n\n\n\n\n\n\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 560,
+        "wires": [
+            [
+                "bba144abec4d3ea7"
+            ],
+            [
+                "27ae575cde794623",
+                "0603ffb73863f240"
+            ]
+        ]
+    },
+    {
+        "id": "0603ffb73863f240",
+        "type": "debug",
+        "z": "e8735e51f6facf66",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "bba144abec4d3ea7",
+        "type": "mongodb4",
+        "z": "e8735e51f6facf66",
+        "clientNode": "e4e23d82a2558e56",
+        "mode": "collection",
+        "collection": "device_temperature_ok",
+        "operation": "updateOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1190,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "27ae575cde794623",
+        "type": "postgresql",
+        "z": "e8735e51f6facf66",
+        "name": "",
+        "query": "SELECT * FROM ;",
+        "postgreSQLConfig": "40c562cb9ac133da",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 1190,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    }
+]
